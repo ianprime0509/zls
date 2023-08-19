@@ -1703,6 +1703,10 @@ pub const Message = union(enum) {
                     else
                         try std.json.parseFromValueLeaky(field.type, allocator, msg_params, options);
 
+                    if (field.type == types.DidChangeTextDocumentParams) {
+                        std.mem.doNotOptimizeAway(params.textDocument.uri);
+                    }
+
                     return .{
                         .notification = @unionInit(Notification, field.name, params),
                     };
